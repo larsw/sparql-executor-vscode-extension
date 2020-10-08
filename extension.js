@@ -40,7 +40,7 @@ const MESSAGE_ITEM = {
  *
  * @param {vscode.ExtensionContext} context
  */
-const selectSparqlConfig = async context => {
+const selectSparqlConfig = async (context) => {
   const endpoints = _.get(vscode.workspace.getConfiguration(EXTENSION_NAME), 'endpoints', [])
 
   if (!endpoints || !endpoints.length) {
@@ -63,7 +63,7 @@ const selectSparqlConfig = async context => {
  *
  * @param {vscode.ExtensionContext} context
  */
-const getSparqlEndpoint = context => {
+const getSparqlEndpoint = (context) => {
   const endpointName = context.workspaceState.get(STATE_KEY.CURRENT_SPARQL_ENDPOINT)
 
   if (!endpointName) {
@@ -102,6 +102,12 @@ const renderAsTable = (results, context) => {
   panel.reveal()
 }
 
+const debug = line => {
+  const outputChannel = vscode.window.createOutputChannel(`SPARQL Debug`)
+  outputChannel.appendLine(line)
+  outputChannel.show(true)
+}
+
 const renderAsJson = results => {
   const outputChannel = vscode.window.createOutputChannel(`SPARQL Results`)
   outputChannel.append(JSON.stringify(results, null, '\t'))
@@ -120,8 +126,9 @@ const executeSparqlQuery = async context => {
     return
   }
 
-  const { protocol, host, output, authentication: { type, username, password } = {} } = endpointConfiguration
-  const url = `${protocol}://${host}/sparql`
+  const { protocol, host, path, output, authentication: { type, username, password } = {} } = endpointConfiguration
+  const realPath = path ?? '/sparql'
+  const url = `${protocol}://${host}${realPath}`
   const query = vscode.window.activeTextEditor.document.getText()
   const queryType = getSparqlQueryType(query)
 
@@ -138,6 +145,8 @@ const executeSparqlQuery = async context => {
   if (type === AUTH_TYPE.BASIC && username && password) {
     options.headers.Authorization = 'Basic ' + Buffer.from(username + ':' + password).toString('base64')
   }
+
+  debug(JSON.stringify(options))
 
   vscode.window.setStatusBarMessage('Executing SPARQL query...')
 

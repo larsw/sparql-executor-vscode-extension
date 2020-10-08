@@ -63,6 +63,10 @@
 								"type": "string",
 								"description": "SPARQL endpoint host"
 							},
+							"path": {
+								"type": "string",
+								"description": "SPARQL endpoint path"
+							},
 							"protocol": {
 								"type": "string",
 								"description": "SPARQL endpoint protocol, either http or https",
@@ -127,11 +131,16 @@
 	},
 	"dependencies": {
 		"fs": "0.0.1-security",
-		"handlebars": "^4.3.0",
+		"handlebars": "^4.7.6",
 		"lodash": "^4.17.19",
 		"request": "^2.88.0",
 		"request-promise-native": "^1.0.7",
 		"sparqljs": "^2.2.3",
 		"tableify": "^1.1.0"
+	},
+	"__metadata": {
+		"id": "c0de8d5b-5c44-4b5d-b8f8-b879f2b4c6cf",
+		"publisherDisplayName": "Dan Whitfield",
+		"publisherId": "3fadbdb8-4837-40ab-94a3-3b52febbef1e"
 	}
 }
